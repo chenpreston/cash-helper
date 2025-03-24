@@ -16,10 +16,10 @@
 
         button {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 10px 10px;
             margin: 5px;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             font-size: 16px;
             cursor: pointer;
 
@@ -36,8 +36,8 @@
         }
 
         .delete-button {
-            background-color: #f44336;
-            color: white;
+            background-color: transparent;
+            
         }
 
         .save-button,
@@ -62,10 +62,12 @@
             justify-content: space-between;
             align-items: center;
             background-color: white;
-            padding: 2px;
+            padding: 0;
             margin-bottom: 5px;
             border-radius: 5px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            font-size: 1em;
+            
         }
 
         .daily-record {
@@ -111,7 +113,7 @@
         }
 
         #records {
-            max-height: 30vh;
+            max-height: 27vh;
             overflow-y: auto;
         }
         .top-up-button {
@@ -130,6 +132,21 @@
                 padding: 5px 10px;
             }
         }
+
+        @keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-100vw);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.record.new {
+    animation: fadeIn 0.5s ease-out;
+}
       
     </style>
 </head>
@@ -165,7 +182,7 @@
             <button class="ticket-button top-up-button" onclick="topUp()">Other</button>
         </div>
     </fieldset>
-    <div id="totalAmount">Today Total Amount: $0.00</div>
+    <div id="totalAmount">Total Amount: $0.00</div>
     <div class="button-container">
         <button class="save-button" onclick="saveDailyRecord()">Save Record</button>
         <button class="view-button" onclick="viewDailyRecords()">View Records</button>
@@ -175,21 +192,27 @@
     <button class="back-button" style="display: none;" onclick="backToMain()">Back</button>
     <script>
         function addRecord(type, amount) {
-            const timestamp = new Date().toLocaleString("en", {
-                month: "2-digit",   // 月份，补零，如 03
-                day: "2-digit",     // 日期，补零，如 22
-                hour: "2-digit",    // 小时，补零，如 14
-                minute: "2-digit",  // 分钟，补零，如 05
-                hour12: false       // 使用 24 小时制，false 为 24 小时，true 为 12 小时
-            });
-            const record = document.createElement('div');
-            record.className = 'record';
-            record.innerHTML = `${timestamp} - ${type}: $${amount.toFixed(2)} <button class="delete-button" onclick="deleteRecord(this)">Delete</button>`;
-            const recordsContainer = document.getElementById('records');
-            recordsContainer.insertBefore(record, recordsContainer.firstChild); // 将新记录添加到最上面
-            updateTotalAmount();
-            saveRecords();
-        }
+    const timestamp = new Date().toLocaleString("en", {
+        month: "short",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+    });
+    const record = document.createElement('div');
+    record.className = 'record new'; // 添加 'new' 类
+    record.innerHTML = `${timestamp} - ${type}: $${amount.toFixed(2)} <button class="delete-button" onclick="deleteRecord(this)"><img src="./delete.svg" width="25"></button>`;
+    const recordsContainer = document.getElementById('records');
+    recordsContainer.insertBefore(record, recordsContainer.firstChild);
+    
+    // 在动画结束后移除 'new' 类
+    setTimeout(() => {
+        record.classList.remove('new');
+    }, 500); // 500ms 与动画时间匹配
+    
+    updateTotalAmount();
+    saveRecords();
+}
 
         function topUpAmount(amount) {
             addRecord('Top Up', amount);
@@ -232,7 +255,11 @@
         function saveDailyRecord() {
             const totalAmount = parseFloat(document.getElementById('totalAmount').innerText.match(/\$([0-9.]+)/)[1]);
             const dailyRecord = {
-                date: new Date().toLocaleDateString(),
+                date: new Date().toLocaleString("en", {
+        year: "numeric",
+                    month: "short",
+        day: "2-digit",
+    }),
                 totalAmount: totalAmount || 0
             };
             const dailyRecords = JSON.parse(localStorage.getItem('dailyRecords') || '[]');
@@ -248,7 +275,7 @@
                 const amount = parseFloat(record.innerHTML.match(/\$([0-9.]+)/)[1]);
                 total += amount;
             });
-            document.getElementById('totalAmount').innerText = `Today Total Amount: $${total.toFixed(2)}`;
+            document.getElementById('totalAmount').innerText = `Total Amount: $${total.toFixed(2)}`;
         }
 
         function displayDailyRecords() {
@@ -258,7 +285,7 @@
             dailyRecords.forEach((dailyRecord, index) => {
                 const recordDiv = document.createElement('div');
                 recordDiv.className = 'daily-record';
-                recordDiv.innerHTML = `<strong>${dailyRecord.date}:</strong>$${dailyRecord.totalAmount.toFixed(2)} <button class="delete-button" onclick="deleteDailyRecord(${index})">Delete</button>`;
+                recordDiv.innerHTML = `<strong>${dailyRecord.date}:</strong>$${dailyRecord.totalAmount.toFixed(2)} <button class="delete-button" onclick="deleteDailyRecord(${index})"><img src="./delete.svg" width="25"></button>`;
                 dailyRecordsDiv.appendChild(recordDiv);
             });
         }
@@ -272,7 +299,7 @@
 
         function clearCurrentRecords() {
             document.getElementById('records').innerHTML = '';
-            document.getElementById('totalAmount').innerText = 'Today Total Amount: $0.00';
+            document.getElementById('totalAmount').innerText = 'Total Amount: $0.00';
             localStorage.removeItem('records');
         }
 

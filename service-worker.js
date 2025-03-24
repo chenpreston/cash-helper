@@ -1,8 +1,9 @@
-const CACHE_NAME = "cash-helper-cache-v0.1.0"; // 更新缓存时修改版本号
+const CACHE_NAME = "cash-helper-cache-v0.1.1"; // 更新缓存时修改版本号
 const CACHE_PREFIX = CACHE_NAME.split("-v")[0]; // 提取前缀 
 const urlsToCache = [
   "/",
   "./index.html",
+  "./delete.svg",
 ];
 
 // 安装事件
