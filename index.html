@@ -13,24 +13,24 @@
         gtag("config", "G-LCDE1JNW2B");
     </script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cash Helper</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             background-color: #f8f8f8;
             margin: 0;
-            padding: 20px;
-            max-height: calc(100vh - 250px);
+            padding: 1em;
+            max-height: 80vh;
         }
 
         button {
             display: inline-block;
-            padding: 10px 10px;
-            margin: 5px;
+            padding: 0.5em;
+            margin: 0;
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 0.5em;
+            font-size: 1em;
             cursor: pointer;
 
         }
@@ -41,13 +41,13 @@
             display: block;
             background-color: #4caf50;
             color: white;
-            width: calc(50% - 10px);
+            width: 40vw;
             font-weight: bold;
         }
 
         .delete-button {
             background-color: transparent;
-            
+
         }
 
         .save-button,
@@ -55,15 +55,15 @@
             background-color: #2196f3;
             color: white;
             display: block;
-            margin: 20px auto;
-            width: calc(50% - 10px);
+            margin: 1em auto;
+            width: 40vw;
         }
 
         .back-button {
             background-color: #2196f3;
             color: white;
             display: block;
-            margin: 20px auto;
+            margin: 1em auto;
             width: 80%;
         }
 
@@ -73,11 +73,11 @@
             align-items: center;
             background-color: white;
             padding: 0;
-            margin-bottom: 5px;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0.2em;
+            border-radius: 0.5em;
+            box-shadow: 0 0.1em 0.1em rgba(0, 0, 0, 0.1);
             font-size: 1em;
-            
+
         }
 
         .daily-record {
@@ -85,35 +85,35 @@
             justify-content: space-between;
             align-items: center;
             background-color: white;
-            padding: 10px;
-            margin-bottom: 5px;
-            border-radius: 5px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 0.5em;
+            margin-bottom: 0.2em;
+            border-radius: 0.5em;
+            box-shadow: 0 0.1em 0.1em rgba(0, 0, 0, 0.1);
         }
 
         #dailyRecords {
-            height: calc(100vh - 200px);
+            height: 80vh;
             overflow-y: auto;
         }
 
 
         #totalAmount {
             text-align: center;
-            margin-top: 20px;
-            font-size: 20px;
+            margin-top: 1em;
+            font-size: 1.5em;
             font-weight: bold;
         }
 
 
         fieldset {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-bottom: 10px;
+            border: 0.1em solid #ccc;
+            border-radius: 0.5em;
+            padding: 1em;
+            margin-bottom: 0.2em;
         }
 
         legend {
-            padding: 0 10px;
+            padding: 0 0.5em;
             font-weight: bold;
         }
 
@@ -123,41 +123,57 @@
         }
 
         #records {
-            max-height: 27vh;
+            max-height: 32vh;
             overflow-y: auto;
         }
+
         .top-up-button {
-            width: calc(25% - 5px);
-            
+            width: 20vw;
+
         }
+
         @media (max-height: 667px) {
             fieldset {
-                margin:0;
+                margin: 0;
             }
+
             #records {
-                max-height: 24vh;
+                max-height: 20vh;
             }
+
             button {
                 margin: 0;
                 padding: 5px 10px;
             }
+            #dailyRecords {
+                height: 75vh;
+            }
+        }
+        @media (min-height: 2000px) {
+            html {
+                font-size: 38px;
+            }
+            #records {
+                max-height: 40vh;
+            }
+            
         }
 
         @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateX(-100vw);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
+            from {
+                opacity: 0;
+                transform: translateX(-100vw);
+            }
 
-.record.new {
-    animation: fadeIn 0.5s ease-out;
-}
-      
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .record.new {
+            animation: fadeIn 0.5s ease-out;
+        }
     </style>
 </head>
 
@@ -202,27 +218,27 @@
     <button class="back-button" style="display: none;" onclick="backToMain()">Back</button>
     <script>
         function addRecord(type, amount) {
-    const timestamp = new Date().toLocaleString("en", {
-        month: "short",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false
-    });
-    const record = document.createElement('div');
-    record.className = 'record new'; // 添加 'new' 类
-    record.innerHTML = `${timestamp} - ${type}: $${amount.toFixed(2)} <button class="delete-button" onclick="deleteRecord(this)"><img src="./delete.svg" width="25"></button>`;
-    const recordsContainer = document.getElementById('records');
-    recordsContainer.insertBefore(record, recordsContainer.firstChild);
-    
-    // 在动画结束后移除 'new' 类
-    setTimeout(() => {
-        record.classList.remove('new');
-    }, 500); // 500ms 与动画时间匹配
-    
-    updateTotalAmount();
-    saveRecords();
-}
+            const timestamp = new Date().toLocaleString("en", {
+                month: "short",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false
+            });
+            const record = document.createElement('div');
+            record.className = 'record new'; // 添加 'new' 类
+            record.innerHTML = `${timestamp} - ${type}: $${amount.toFixed(2)} <button class="delete-button" onclick="deleteRecord(this)"><img src="./delete.svg" width="25"></button>`;
+            const recordsContainer = document.getElementById('records');
+            recordsContainer.insertBefore(record, recordsContainer.firstChild);
+
+            // 在动画结束后移除 'new' 类
+            setTimeout(() => {
+                record.classList.remove('new');
+            }, 500); // 500ms 与动画时间匹配
+
+            updateTotalAmount();
+            saveRecords();
+        }
 
         function topUpAmount(amount) {
             addRecord('Top Up', amount);
@@ -266,10 +282,10 @@
             const totalAmount = parseFloat(document.getElementById('totalAmount').innerText.match(/\$([0-9.]+)/)[1]);
             const dailyRecord = {
                 date: new Date().toLocaleString("en", {
-        year: "numeric",
+                    year: "numeric",
                     month: "short",
-        day: "2-digit",
-    }),
+                    day: "2-digit",
+                }),
                 totalAmount: totalAmount || 0
             };
             const dailyRecords = JSON.parse(localStorage.getItem('dailyRecords') || '[]');
@@ -344,37 +360,37 @@
     <script>
         // Service Worker 注册
         if ("serviceWorker" in navigator) {
-         
-          navigator.serviceWorker
-            .register("./service-worker.js")
-            .then((registration) => {
-            
-              registration.addEventListener("updatefound", () => {
-                const newWorker = registration.installing;
-                newWorker.addEventListener("statechange", () => {
-                  if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-              
-                    if (confirm("A new version CASH Helper is available. Refresh to update?")) {
-                      newWorker.postMessage({ action: "skipWaiting" });
-                    }
-                  }
-                });
-              });
-            })
-            .catch((err) => console.error("CASH helper: Service Worker registration failed:", err));
-    
-          navigator.serviceWorker.addEventListener("controllerchange", () => {
-           
-            window.location.reload();
-          });
-    
-          navigator.serviceWorker.addEventListener("message", (event) => {
-            if (event.data && event.data.action === "skipWaiting") {
-             
-            }
-          });
+
+            navigator.serviceWorker
+                .register("./service-worker.js")
+                .then((registration) => {
+
+                    registration.addEventListener("updatefound", () => {
+                        const newWorker = registration.installing;
+                        newWorker.addEventListener("statechange", () => {
+                            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+
+                                if (confirm("A new version CASH Helper is available. Refresh to update?")) {
+                                    newWorker.postMessage({ action: "skipWaiting" });
+                                }
+                            }
+                        });
+                    });
+                })
+                .catch((err) => console.error("CASH helper: Service Worker registration failed:", err));
+
+            navigator.serviceWorker.addEventListener("controllerchange", () => {
+
+                window.location.reload();
+            });
+
+            navigator.serviceWorker.addEventListener("message", (event) => {
+                if (event.data && event.data.action === "skipWaiting") {
+
+                }
+            });
         }
-      </script>
+    </script>
 </body>
 
 </html>
