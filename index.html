@@ -352,10 +352,10 @@
             document.querySelector('.back-button').style.display = 'none';
         }
 
-        window.onload = function () {
-            loadRecords();
-            displayDailyRecords();
-        };
+        document.addEventListener('DOMContentLoaded', function () {
+    loadRecords();
+    displayDailyRecords();
+});
     </script>
     <script>
         // Service Worker 注册
