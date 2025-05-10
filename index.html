@@ -235,9 +235,9 @@
         }
 
         function topUp() {
-            let amount = parseFloat(prompt("Enter top-up amount (minimum $5):"));
-            if (isNaN(amount) || amount < 5) {
-                alert("Invalid amount. Minimum is $5.");
+            let amount = parseFloat(prompt("Enter top-up amount (can be negative):"));
+            if (isNaN(amount)) {
+                alert("Invalid amount.");
                 return;
             }
             addRecord('Top Up', amount);
@@ -288,7 +288,7 @@
         function updateTotalAmount() {
             let total = 0;
             document.querySelectorAll('#records .record').forEach(record => {
-                const amount = parseFloat(record.innerHTML.match(/\$([0-9.]+)/)[1]);
+                const amount = parseFloat(record.innerHTML.match(/\$(-?[0-9.]+)/)[1]);
                 total += amount;
             });
             document.getElementById('totalAmount').innerText = `Total Amount: $${total.toFixed(2)}`;
